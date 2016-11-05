@@ -15,10 +15,15 @@ public class PessoasBean {
 
     public PessoasBean() {
     }
-    
+    public void limpaTela(){
+        pessoas.setNome("");
+        pessoas.setEmail("");
+        pessoas.setTelefone("");
+    }
     //metodo para add pessoa
     public String adicionar(){
         pessoasDao.addPessoa(pessoas);
+        //limpaTela();
         return "sucesso";
     }
     public String remove(){
