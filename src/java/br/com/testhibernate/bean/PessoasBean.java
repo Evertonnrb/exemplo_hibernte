@@ -2,6 +2,7 @@ package br.com.testhibernate.bean;
 
 import br.com.testhibernate.dao.PessoasDao;
 import br.com.testhibernate.entity.Pessoas;
+import java.util.List;
 import java.util.Objects;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -10,39 +11,56 @@ import javax.faces.bean.RequestScoped;
 @RequestScoped
 public class PessoasBean {
 
-    private Pessoas pessoas = new Pessoas();
+    private Pessoas pessoa = new Pessoas();
     private PessoasDao pessoasDao = new PessoasDao();
-
+    private List<Pessoas>listarPessoas;
+    
     public PessoasBean() {
     }
     public void limpaTela(){
-        pessoas.setNome("");
-        pessoas.setEmail("");
-        pessoas.setTelefone("");
+//        pessoas.setNome(null);
+//        pessoas.setEmail(null);
+//        pessoas.setTelefone(null);
     }
     //metodo para add pessoa
-    public String adicionar(){
-        pessoasDao.addPessoa(pessoas);
+    public String adicionarPessoa(){
+        pessoasDao.addPessoa(pessoa);
         //limpaTela();
-        return "sucesso";
+        pessoa.setNome(null);
+        pessoa.setEmail(null);
+        pessoa.setTelefone(null);
+        return "index";
     }
-    public String remove(){
-        pessoasDao.removePessoa(pessoas);
-        return "sucesso";
+    public String remove(Pessoas p){
+        this.pessoa = p;
+        pessoasDao.removePessoa(this.pessoa);
+        return "index";
+    }
+    public List listarPessoas(){
+        listarPessoas = pessoasDao.getList();
+        return  this.listarPessoas;
     }
 
     public Pessoas getPessoas() {
-        return pessoas;
+        return pessoa;
     }
 
     public void setPessoas(Pessoas pessoas) {
-        this.pessoas = pessoas;
+        this.pessoa = pessoas;
+    }
+
+    public PessoasDao getPessoasDao() {
+        return pessoasDao;
+    }
+
+    public void setPessoasDao(PessoasDao pessoasDao) {
+        this.pessoasDao = pessoasDao;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.pessoas);
+        hash = 71 * hash + Objects.hashCode(this.pessoa);
         return hash;
     }
 
@@ -58,7 +76,7 @@ public class PessoasBean {
             return false;
         }
         final PessoasBean other = (PessoasBean) obj;
-        if (!Objects.equals(this.pessoas, other.pessoas)) {
+        if (!Objects.equals(this.pessoa, other.pessoa)) {
             return false;
         }
         return true;
